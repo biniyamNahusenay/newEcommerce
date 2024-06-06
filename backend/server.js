@@ -13,11 +13,15 @@ const io = new Server(server, {
 })
 const User = require("./models/userSchema")
 const userRoutes = require("./routes/userRoutes")
+const productRoutes = require("./routes/productRoute")
+const imageRoutes = require("./routes/imageRoutes")
 
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/users',userRoutes)
+app.use('/products',productRoutes)
+app.use('/images',imageRoutes)
 
 try{
   mongoose.connect(process.env.mongo_url)
