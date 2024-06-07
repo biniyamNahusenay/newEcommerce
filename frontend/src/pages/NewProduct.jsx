@@ -30,7 +30,8 @@ function NewProduct() {
     if(!name || !description || !price || !category || !images.length){
       return alert("Please fill out all the fields")
     }
-    createProduct({name, description, price, category, images}).then(({data})=>{
+    createProduct({name, description, price, category, images})
+    .then(({data})=>{
       if(data.length > 0){
         setTimeout(()=>{
          navigate("/")

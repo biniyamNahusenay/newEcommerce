@@ -9,6 +9,8 @@ import SimilarProduct from '../components/SimilarProduct'
 import { Badge, ButtonGroup, Col, Container, Row, Form, Button } from 'react-bootstrap'
 import "./ProductPage.css"
 import { LinkContainer } from 'react-router-bootstrap'
+import { useAddToCartMutation } from "../services/appApi"
+import ToastMessage from "../components/ToastMessage"
 
 
 function ProductPage() {
@@ -16,6 +18,7 @@ function ProductPage() {
     const user = useSelector((state)=>state.user)
     const [product,setProduct] = useState(null)
     const [similar,setSimilar] = useState(null)
+    const [addToCart,{isSuccess}] = useAddToCartMutation()
   
   const handleDragStart = (e) => e.preventDefault()
 
@@ -40,11 +43,11 @@ function ProductPage() {
     
   let similarProducts = []
   if(similar){
-    similarProducts = similar.map((product,idx)=>{
+    similarProducts = similar.map((product,idx)=>(
       <div className='item' data-value={idx}>
         <SimilarProduct {...product}/>
       </div>
-    })
+    ))
   }
 
   return (
@@ -71,7 +74,7 @@ function ProductPage() {
                                 <option value="4">4</option>
                                 <option value="5">5</option>
                             </Form.Select>
-                            <Button size="lg">
+                            <Button size="lg" onClick={()=>addToCart({userId:user._id,productId:id,price:product.price,image:product.pictures[0].url})}>
                                 Add to cart
                             </Button>
                         </ButtonGroup>
@@ -81,7 +84,8 @@ function ProductPage() {
                          <Button size='lg'>Edit Product</Button>
                       </LinkContainer>
                     )}
-        </Col>
+                 {isSuccess && <ToastMessage bg="info" title="Added to cart" body={`${product.name} is in your cart`} />}
+           </Col>
        <div className="my-4">
           <h2>Similar Products</h2>
           <div className="d-flex justify-content-center align-items-center flex-wrap">
